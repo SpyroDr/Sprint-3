@@ -3,6 +3,7 @@ import io.restassured.response.ValidatableResponse;
 import static io.restassured.RestAssured.given;
 
 
+
 public class OrderClient extends RestAssuredClient{
 
     private static final String ORDERS_PATH = "/api/v1/orders";
@@ -21,11 +22,13 @@ public class OrderClient extends RestAssuredClient{
     }
 
     @Step("Получение списка заказов")
-    public ValidatableResponse getList(int limit ){
+    public ValidatableResponse getList(int limit, int page){
         return given()
                 .spec(getBaseSpec())
+                .queryParam("limit", limit)
+                .queryParam("page", page)
                 .when()
-                .get(ORDERS_PATH+"?limit="+limit+"&page=0")
+                .get(ORDERS_PATH)
                 .then();
     }
 
@@ -34,7 +37,8 @@ public class OrderClient extends RestAssuredClient{
         return given()
                 .spec(getBaseSpec())
                 .when()
-                .get(ORDERS_PATH+"/track?t="+track)
+                .queryParam("t", track)
+                .get(ORDERS_PATH+"/track")
                 .then()
                 .log().body();
     }
@@ -45,7 +49,7 @@ public class OrderClient extends RestAssuredClient{
         return given()
                 .spec(getBaseSpec())
                 .and()
-                .body("{\"id\":"+orderId+"}")
+                .body(String.format("{\"id\":%s}",orderId))
                 .log().body()
                 .when()
                 .put(ORDERS_PATH + "/finish/"+orderId)

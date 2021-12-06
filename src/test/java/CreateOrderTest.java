@@ -49,9 +49,9 @@ public class CreateOrderTest {
         );
     }
 
-    public CreateOrderTest(String color_1, String color_2) {
-        colors[0] = color_1;
-        colors[1] = color_2;
+    public CreateOrderTest(String OneColor, String TwoColor) {
+        colors[0] = OneColor;
+        colors[1] = TwoColor;
     }
 
 
